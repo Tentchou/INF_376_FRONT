@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react'
 import CapteurCard from '../components/CapteurCard.jsx'
 import CapteurChart from '../components/CapteurChart.jsx'
-import api from '../api.js'
+// import api from '../api.js'
+import client from '../Services/api.js'
 
 export default function Dashboard() {
   const [readings, setReadings] = useState([])
   const poller = useRef(null)
 
   const fetchData = () => {
-    api
+    client
       .get('/capteurs')
       .then((res) => {
         const pts = res.data.map((c) => ({
