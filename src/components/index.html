@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Site Responsive avec Sidebar</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f4f6f9, #dfe6e9);
+    }
+
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .logo {
+      font-size: 1.5rem;
+    }
+
+    .burger {
+      display: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: #34495e;
+      color: #fff;
+      padding: 2rem 1rem;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      margin: 1rem 0;
+    }
+
+    .sidebar ul li a {
+      color: #ecf0f1;
+      text-decoration: none;
+      font-size: 1.1rem;
+      display: block;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .sidebar ul li a:hover {
+      background: #1abc9c;
+      transform: translateX(5px);
+    }
+
+    .content {
+      flex: 1;
+      padding: 2rem;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        height: calc(100% - 60px);
+        background: #2c3e50;
+        width: 200px;
+        transform: translateX(-100%);
+        z-index: 999;
+      }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
+
+      .burger {
+        display: block;
+      }
+
+      .content {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">MonSite</div>
+    <div class="burger" id="burger">&#9776;</div>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar" id="sidebar">
+      <ul>
+        <li><a href="#" data-page="home">Accueil</a></li>
+        <li><a href="#" data-page="about">À propos</a></li>
+        <li><a href="#" data-page="services">Services</a></li>
+        <li><a href="#" data-page="contact">Contact</a></li>
+      </ul>
+    </aside>
+
+    <main class="content" id="content">
+      <h1>Bienvenue</h1>
+      <p>Sélectionnez une page depuis le menu.</p>
+    </main>
+  </div>
+
+  <script>
+    const links = document.querySelectorAll('.sidebar a');
+    const content = document.getElementById('content');
+    const burger = document.getElementById('burger');
+    const sidebar = document.getElementById('sidebar');
+
+    const pages = {
+      home: {
+        title: "Accueil",
+        text: "Bienvenue sur la page d'accueil !"
+      },
+      about: {
+        title: "À propos",
+        text: "Nous sommes une entreprise moderne spécialisée en développement web."
+      },
+      services: {
+        title: "Services",
+        text: "Nous proposons des services de qualité en développement, design et plus."
+      },
+      contact: {
+        title: "Contact",
+        text: "Contactez-nous à l'adresse suivante : contact@monsite.com"
+      }
+    };
+
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const page = link.getAttribute('data-page');
+        const pageData = pages[page];
+
+        content.innerHTML = `
+          <h1>${pageData.title}</h1>
+          <p>${pageData.text}</p>
+        `;
+
+        if (window.innerWidth <= 768) {
+          sidebar.classList.remove('active');
+        }
+      });
+    });
+
+    burger.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+    });
+
+    // Fermer sidebar si on clique en dehors
+    window.addEventListener('click', function (e) {
+      if (!sidebar.contains(e.target) && !burger.contains(e.target) && window.innerWidth <= 768) {
+        sidebar.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
